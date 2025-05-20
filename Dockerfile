@@ -21,3 +21,6 @@ RUN composer install --optimize-autoloader --no-dev
 
 # Da permisos a Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Cambia DocumentRoot para que apunte a /var/www/html/public
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
