@@ -9,7 +9,7 @@ class ProductController extends Controller
 {
     public function listProducts(Request $request) {
         $query = Product::with(['gender', 'category', 'brand', 'tags', 'sizes', 'colors']); // El with permite traer relaciones aparte de la consulta, esto está en el modelo Product.
-        $allowedFilters = ['page', 'category', 'brand', 'gender', 'size', 'color', 'tag'];
+        $allowedFilters = ['search', 'price', 'page', 'category', 'brand', 'gender', 'size', 'color', 'tag'];
         $requestFilters = array_keys($request->query()); // Array con los filtros que vienen en la url luego del "?"
         // Verificar si hay al menos un filtro válido
         if(!empty($requestFilters)) {
@@ -17,6 +17,16 @@ class ProductController extends Controller
             if(empty($validFilters)) {
                 return response()->json(['error' => 'No se encontraron filtros válidos']);
             }
+        }
+
+        if ($request->has('search')) {
+            $searchValue = $request->query('search');
+            $query->where('name', 'like', "%$searchValue%");
+        }
+
+        if ($request->has('price')) {
+            $maxPrice = $request->query('price');
+            $query->where('price', '<=', $maxPrice);
         }
 
         if($request->has('category')) { // Aca va lo que se pone en la url, si tiene la palabra "category"
@@ -54,12 +64,12 @@ class ProductController extends Controller
             });
         }
         
-        return response()->json($query->paginate(10));
+        return response()->json($query->paginate(6));
     }
 
     public function listAllProducts(Request $request) {
         $query = Product::with(['gender', 'category', 'brand', 'tags', 'sizes', 'colors']); // El with permite traer relaciones aparte de la consulta, esto está en el modelo Product.
-        $allowedFilters = ['page', 'category', 'brand', 'gender', 'size', 'color', 'tag'];
+        $allowedFilters = ['search', 'page', 'category', 'brand', 'gender', 'size', 'color', 'tag'];
         $requestFilters = array_keys($request->query()); // Array con los filtros que vienen en la url luego del "?"
         // Verificar si hay al menos un filtro válido
         if(!empty($requestFilters)) {

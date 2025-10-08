@@ -23,5 +23,6 @@ Route::prefix('api')->group(function () {
     Route::get('/products', [ProductController::class, 'listProducts']);
     Route::get('/product/{id}', [ProductController::class, 'listProductsById']);
     Route::get('/all-products', [ProductController::class, 'listAllProducts']);
+    Route::get('/products/{searchValue}', [ProductController::class, 'listProductsBySearch']);
 });
 
