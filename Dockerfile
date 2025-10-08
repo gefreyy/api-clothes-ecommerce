@@ -1,10 +1,10 @@
 # Usa imagen oficial de PHP con Apache
 FROM php:8.2-apache
 
-# Instala dependencias necesarias
+# Instala dependencias necesarias (agregamos libpq-dev para PostgreSQL)
 RUN apt-get update && apt-get install -y \
-    libzip-dev zip unzip git curl libpng-dev libonig-dev libxml2-dev \
-    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd
+    libzip-dev zip unzip git curl libpng-dev libonig-dev libxml2-dev libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql mbstring zip exif pcntl bcmath gd
 
 # Habilita mod_rewrite de Apache
 RUN a2enmod rewrite
